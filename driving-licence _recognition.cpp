@@ -1,6 +1,6 @@
 //2017.11.10
-// demo_4.cpp : ¶¨Òå¿ØÖÆÌ¨Ó¦ÓÃ³ÌĞòµÄÈë¿Úµã.
-//¹¦ÄÜ:»ñÈ¡Éí·İÖ¤µÄÍâ¾ØĞÎ¿ò±ßÔµ£¬²¢Í¨¹ı·ÂÉä±ä»»¶ÔÇãĞ±¡¢±äĞÎµÄÍ¼Æ¬½øĞĞĞ£Õı£¬Í¶Ó°µ½ÕıÃæ
+// demo_4.cpp : å®šä¹‰æ§åˆ¶å°åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹.
+//åŠŸèƒ½:è·å–èº«ä»½è¯çš„å¤–çŸ©å½¢æ¡†è¾¹ç¼˜ï¼Œå¹¶é€šè¿‡ä»¿å°„å˜æ¢å¯¹å€¾æ–œã€å˜å½¢çš„å›¾ç‰‡è¿›è¡Œæ ¡æ­£ï¼ŒæŠ•å½±åˆ°æ­£é¢
 //==========================================================
 #include "stdafx.h"
 #include <opencv2/core/core.hpp>  
@@ -20,17 +20,17 @@
 #include <atlstr.h>
 using namespace std;
 using namespace cv;
-//¶Ô¶şÖµ»¯Í¼½øĞĞ·´×ª
+//å¯¹äºŒå€¼åŒ–å›¾è¿›è¡Œåè½¬
 Mat reverse(Mat biImage)
 {
 	Mat result_3 = biImage < 100;
 	return result_3;
 }
-//½«UTF-8±àÂëµÄÖĞÎÄ×Ö·û×ª»»ÎªASNI±àÂë¸ñÊ½
-//Ô­Òò£ºÒòÎªÍ¨¹ıTesseract-OCRÊ¶±ğµÄÎÄ×Ö»òÕßÊı×ÖÊÇÒÔUTF8±àÂë¸ñÊ½´æ´¢µ½txtÖĞ£¬ÕâÀïÎªÁËÊä³öÊ±²»·¢ÉúÂÒÂë£¬ÏÈ×ª»»³ÉANSI¸ñÊ½ÔÙÊä³ö¡£
+//å°†UTF-8ç¼–ç çš„ä¸­æ–‡å­—ç¬¦è½¬æ¢ä¸ºASNIç¼–ç æ ¼å¼
+//åŸå› ï¼šå› ä¸ºé€šè¿‡Tesseract-OCRè¯†åˆ«çš„æ–‡å­—æˆ–è€…æ•°å­—æ˜¯ä»¥UTF8ç¼–ç æ ¼å¼å­˜å‚¨åˆ°txtä¸­ï¼Œè¿™é‡Œä¸ºäº†è¾“å‡ºæ—¶ä¸å‘ç”Ÿä¹±ç ï¼Œå…ˆè½¬æ¢æˆANSIæ ¼å¼å†è¾“å‡ºã€‚
 void UTF8toANSI(CString &strUTF8)  
 {
-	//»ñÈ¡×ª»»Îª¶à×Ö½ÚºóĞèÒªµÄ»º³åÇø´óĞ¡£¬´´½¨¶à×Ö½Ú»º³åÇø  
+	//è·å–è½¬æ¢ä¸ºå¤šå­—èŠ‚åéœ€è¦çš„ç¼“å†²åŒºå¤§å°ï¼Œåˆ›å»ºå¤šå­—èŠ‚ç¼“å†²åŒº  
 	UINT nLen = MultiByteToWideChar(CP_UTF8, NULL, strUTF8, -1, NULL, NULL);
 	WCHAR *wszBuffer = new WCHAR[nLen + 1];
 	nLen = MultiByteToWideChar(CP_UTF8, NULL, strUTF8, -1, wszBuffer, nLen);
@@ -42,53 +42,53 @@ void UTF8toANSI(CString &strUTF8)
 	szBuffer[nLen] = 0;
 
 	strUTF8 = szBuffer;
-	//ÇåÀíÄÚ´æ  
+	//æ¸…ç†å†…å­˜  
 	delete[]szBuffer;
 	delete[]wszBuffer;
 }
 //===================================================
 int main()
 {
-	string src_path;   //Ô­Ê¼Í¼Æ¬Â·¾¶
+	string src_path;   //åŸå§‹å›¾ç‰‡è·¯å¾„
 	int src_width, src_height;
-	cout << "ÊäÈëÍ¼Æ¬Â·¾¶£º";
+	cout << "è¾“å…¥å›¾ç‰‡è·¯å¾„ï¼š";
 	cin >> src_path;
 	Mat src = imread(src_path);
 	src_width = src.size().width;
 	src_height = src.size().height;
 
-    //Ê¹ÓÃmean_shiftº¯Êı£¬Í»³öÇ°¾°ºÍ±³¾°µÄ²îÒì£¬Í¬Ê±¼õÉÙÎÆÀí£¬ÎªºóÃæÌáÈ¡ÂÖÀª×ö×¼±¸
+    //ä½¿ç”¨mean_shiftå‡½æ•°ï¼Œçªå‡ºå‰æ™¯å’ŒèƒŒæ™¯çš„å·®å¼‚ï¼ŒåŒæ—¶å‡å°‘çº¹ç†ï¼Œä¸ºåé¢æå–è½®å»“åšå‡†å¤‡
 	Mat mean_shift;
-	pyrMeanShiftFiltering(src, mean_shift, 20, 20, 3);  //Ô­Ê¼:30 , 40 , 3
+	pyrMeanShiftFiltering(src, mean_shift, 20, 20, 3);  //åŸå§‹:30 , 40 , 3
 	imwrite("mean_shift.jpg", mean_shift);
 
-    //×ª»»Îª»Ò¶ÈÍ¼
+    //è½¬æ¢ä¸ºç°åº¦å›¾
 	Mat gray_image;
 	cvtColor(mean_shift, gray_image, CV_BGR2GRAY);
 	imwrite("gray.jpg", gray_image);
 
-	//¶şÖµ»¯
+	//äºŒå€¼åŒ–
 	Mat biImage;
 	adaptiveThreshold(gray_image, biImage, 255, CV_ADAPTIVE_THRESH_MEAN_C,
-		CV_THRESH_BINARY_INV, 15, 10);  ///¾Ö²¿×ÔÊÊÓ¦¶şÖµ»¯º¯Êı  
+		CV_THRESH_BINARY_INV, 15, 10);  ///å±€éƒ¨è‡ªé€‚åº”äºŒå€¼åŒ–å‡½æ•°  
 	imwrite("biImage.jpg", biImage);
     
-    //contourImage³õÊ¼»¯Ò»¸öºÍÔ­Ê¼Í¼Æ¬ÏàÍ¬´óĞ¡µÄÍ¼Ïñ¾ØÕó£¬»Ò¶ÈÖµÎª0
+    //contourImageåˆå§‹åŒ–ä¸€ä¸ªå’ŒåŸå§‹å›¾ç‰‡ç›¸åŒå¤§å°çš„å›¾åƒçŸ©é˜µï¼Œç°åº¦å€¼ä¸º0
 	Mat contourImage(biImage.rows, biImage.cols, CV_8UC1, Scalar(0, 0, 0));
 	vector<vector<Point> > contours;
 	vector<Vec4i> hierarchy;
 
-	//ÕÒ³öÂÖÀª£¬ÉÏÃæµÄµã´æ´¢ÔÚcontoursÖĞ
+	//æ‰¾å‡ºè½®å»“ï¼Œä¸Šé¢çš„ç‚¹å­˜å‚¨åœ¨contoursä¸­
 	findContours(biImage, contours, hierarchy, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
 	for (int i = 0; i < contours.size(); i++)
 	{
-		drawContours(contourImage, contours, i, Scalar(255, 255, 255), 1, 8, hierarchy, 1);//»æÖÆÂÖÀª
+		drawContours(contourImage, contours, i, Scalar(255, 255, 255), 1, 8, hierarchy, 1);//ç»˜åˆ¶è½®å»“
 	}
 	imwrite("lunkuo.jpg", contourImage);
     
-    //ÀûÓÃHoughLinesP£¨£©»­³öÂÖÀªÖĞµÄÖ±Ïß
+    //åˆ©ç”¨HoughLinesPï¼ˆï¼‰ç”»å‡ºè½®å»“ä¸­çš„ç›´çº¿
 	vector<Vec4i>lines;
-	HoughLinesP(contourImage, lines, 1, CV_PI / 180, 60, 60, 10);  //Ô­Ê¼ÖµÊÇ1,CV_PI/180,50,50,10
+	HoughLinesP(contourImage, lines, 1, CV_PI / 180, 60, 60, 10);  //åŸå§‹å€¼æ˜¯1,CV_PI/180,50,50,10
 	Mat img_lines;
 	cvtColor(contourImage, img_lines, CV_GRAY2BGR);
 	for (size_t i = 0; i < lines.size(); i++)
@@ -98,7 +98,7 @@ int main()
 	}
 	imwrite("lunkuo_line.jpg", img_lines);
 
-    //ÏÂÃæËÄ¸ö±äÁ¿·Ö±ğ´æ´¢¾ØĞÎ¿òÂÖÀªËÄ¸ö±ßÉÏµÄÖ±Ïß¶Î
+    //ä¸‹é¢å››ä¸ªå˜é‡åˆ†åˆ«å­˜å‚¨çŸ©å½¢æ¡†è½®å»“å››ä¸ªè¾¹ä¸Šçš„ç›´çº¿æ®µ
 	vector<Vec4i>up_ping_lines;
 	vector<Vec4i>down_ping_lines;
 	vector<Vec4i>left_shu_lines;
@@ -107,15 +107,15 @@ int main()
 	for (size_t i = 0; i < lines.size(); i++)
 	{
 		Vec4i I = lines[i];
-		//ÕâÀïµÄãĞÖµ¾ùÉèÎª60
-		if ((abs(I[2] - I[0]) > 60) && (abs(I[3] - I[1]) < 60))  //Ë®Æ½Ö±Ïß
+		//è¿™é‡Œçš„é˜ˆå€¼å‡è®¾ä¸º60
+		if ((abs(I[2] - I[0]) > 60) && (abs(I[3] - I[1]) < 60))  //æ°´å¹³ç›´çº¿
 		{
 			if (I[1] < (src_height / 2))
 				up_ping_lines.push_back(I);
 			else
 				down_ping_lines.push_back(I);
 		}
-		else if (abs(I[2] - I[0] < 60) && (abs(I[3] - I[1]) > 60))  //ÊúÖ±Ö±Ïß
+		else if (abs(I[2] - I[0] < 60) && (abs(I[3] - I[1]) > 60))  //ç«–ç›´ç›´çº¿
 		{
 			if (I[0] < (src_width / 2))
 				left_shu_lines.push_back(I);
@@ -125,12 +125,12 @@ int main()
 			
 	}
 
-	// =================ÕÒ³öÓĞÇãĞ±µÄÍ¼Æ¬¾ØĞÎ¿òµÄËÄ¸ö¶¥µã£¬Ö®ºóÔÙ²ÉÓÃ·ÂÉä±ä»»½øĞĞ½ÃÕı=========================
-	// Ñ¡È¡·½·¨ÊÇ£ºÀıÈç¶ÔÓÚ×óÉÏ½ÇµÄ¶¥µã£¬ËüµÄ×ø±êÖµµÈÓÚºÍËüÏàÁÚµÄ×î½üµÄË®Æ½Ö±Ïß¶ÎºÍÊúÖ±Ö±Ïß¶ÎµÄ½»µã£¬ÆäËûÈı¸ö¶¥µãÀàËÆ£»
+	// =================æ‰¾å‡ºæœ‰å€¾æ–œçš„å›¾ç‰‡çŸ©å½¢æ¡†çš„å››ä¸ªé¡¶ç‚¹ï¼Œä¹‹åå†é‡‡ç”¨ä»¿å°„å˜æ¢è¿›è¡ŒçŸ«æ­£=========================
+	// é€‰å–æ–¹æ³•æ˜¯ï¼šä¾‹å¦‚å¯¹äºå·¦ä¸Šè§’çš„é¡¶ç‚¹ï¼Œå®ƒçš„åæ ‡å€¼ç­‰äºå’Œå®ƒç›¸é‚»çš„æœ€è¿‘çš„æ°´å¹³ç›´çº¿æ®µå’Œç«–ç›´ç›´çº¿æ®µçš„äº¤ç‚¹ï¼Œå…¶ä»–ä¸‰ä¸ªé¡¶ç‚¹ç±»ä¼¼ï¼›
 	int left_up_x = 0, left_up_y = 0, right_up_x = 0, right_up_y = 0 , left_down_x = 0 , left_down_y = 0 , right_down_x = 0 , right_down_y = 0;
 	float x_1, x_2, x_3, x_4, y_1, y_2, y_3, y_4;
 	float a, b, c, d;
-	//======================×óÉÏ½Ç×ø±êÖµ=====================================
+	//======================å·¦ä¸Šè§’åæ ‡å€¼=====================================
 	if (up_ping_lines.size() == 1)
 	{
 		x_1 = up_ping_lines[0][0];
@@ -181,7 +181,7 @@ int main()
 	}
 	a = (y_2 - y_1) / (x_2 - x_1);
 	b = (x_2 * y_1 - x_1 * y_2) / (x_2 - x_1);
-	if (x_3 == x_4)  //Çó×óÉÏ½Ç×ø±êÖµ
+	if (x_3 == x_4)  //æ±‚å·¦ä¸Šè§’åæ ‡å€¼
 	{
 		left_up_x = x_3;
 		left_up_y = a * x_3 + b;   
@@ -193,7 +193,7 @@ int main()
 		left_up_x = (d - b) / (a - c);
 		left_up_y = (a * d - b * c) / (a - c);     
 	}
-//========================================================ÓÒÉÏ½Ç×ø±êÖµ============================
+//========================================================å³ä¸Šè§’åæ ‡å€¼============================
 	if (up_ping_lines.size() == 1)
 	{
 		x_1 = up_ping_lines[0][0];
@@ -244,7 +244,7 @@ int main()
 	}
 	a = (y_2 - y_1) / (x_2 - x_1);
 	b = (x_2 * y_1 - x_1 * y_2) / (x_2 - x_1);
-	if ((x_4 - x_3) == 0)  //Çó×óÉÏ½Ç×ø±êÖµ
+	if ((x_4 - x_3) == 0)  //æ±‚å·¦ä¸Šè§’åæ ‡å€¼
 	{
 		right_up_x = x_3;
 		right_up_y = a * x_3 + b;
@@ -256,7 +256,7 @@ int main()
 		right_up_x = (d - b) / (a - c);
 		right_up_y = (a * d - b * c) / (a - c);
 	}
-	//======================================================×óÏÂ½Ç×ø±êÖµ=============================================
+	//======================================================å·¦ä¸‹è§’åæ ‡å€¼=============================================
 	if (down_ping_lines.size() == 1)
 	{
 		x_1 = down_ping_lines[0][0];
@@ -307,7 +307,7 @@ int main()
 	}
 	a = (y_2 - y_1) / (x_2 - x_1);
 	b = (x_2 * y_1 - x_1 * y_2) / (x_2 - x_1);
-	if ((x_4 - x_3) == 0)  //Çó×óÏÂ½Ç×ø±êÖµ
+	if ((x_4 - x_3) == 0)  //æ±‚å·¦ä¸‹è§’åæ ‡å€¼
 	{
 		left_down_x = x_3;
 		left_down_y = a * x_3 + b;
@@ -319,7 +319,7 @@ int main()
 		left_down_x = (d - b) / (a - c);
 		left_down_y = (a * d - b * c) / (a - c);
 	}
-	//=====================================ÓÒÏÂ½Ç×ø±êÖµ=====================================
+	//=====================================å³ä¸‹è§’åæ ‡å€¼=====================================
 	if (down_ping_lines.size() == 1)
 	{
 		x_1 = down_ping_lines[0][0];
@@ -370,7 +370,7 @@ int main()
 	}
 	a = (y_2 - y_1) / (x_2 - x_1);
 	b = (x_2 * y_1 - x_1 * y_2) / (x_2 - x_1);
-	if ((x_4 - x_3) == 0)  //Çó×óÉÏ½Ç×ø±êÖµ
+	if ((x_4 - x_3) == 0)  //æ±‚å·¦ä¸Šè§’åæ ‡å€¼
 	{
 		right_down_x = x_3;
 		right_down_y = a * x_3 + b;
@@ -383,7 +383,7 @@ int main()
 		right_down_y = (a * d - b * c) / (a - c);
 	}
 	//==============================================================================
-	//ÔÚÇ°Ãæ½øĞĞ¶şÖµ»¯µÄÊ±ºò£¬ÓÉÓÚ¼Ó¿íÁËÍâÂÖÀªµÄ¿í¶ÈÔì³ÉÁËÒ»¶¨Îó²î£¬ÕâÀïÃÖ²¹Õâ¸öÎó²î
+	//åœ¨å‰é¢è¿›è¡ŒäºŒå€¼åŒ–çš„æ—¶å€™ï¼Œç”±äºåŠ å®½äº†å¤–è½®å»“çš„å®½åº¦é€ æˆäº†ä¸€å®šè¯¯å·®ï¼Œè¿™é‡Œå¼¥è¡¥è¿™ä¸ªè¯¯å·®
 	left_up_x = left_up_x + 7;
 	left_up_y = left_up_y + 7;
 	left_down_x = left_down_x + 7;
@@ -393,7 +393,7 @@ int main()
 	right_down_x = right_down_x - 7;
 	right_down_y = right_down_y - 7;
 
-    //points´æ´¢ÍâÂÖÀªµÄËÄ¸ö¶¥µã£¬rec´æ´¢·ÂÉä±ä»»µ½µÄÄ¿±ê¶¥µã×ø±ê£¬ÕâÀï²ÉÓÃ860*600µÄ´óĞ¡£¬³¤¿í±ÈºÍÉí·İÖ¤ÕæÊµ³¤¿í±ÈÒ»ÖÂ
+    //pointså­˜å‚¨å¤–è½®å»“çš„å››ä¸ªé¡¶ç‚¹ï¼Œrecå­˜å‚¨ä»¿å°„å˜æ¢åˆ°çš„ç›®æ ‡é¡¶ç‚¹åæ ‡ï¼Œè¿™é‡Œé‡‡ç”¨860*600çš„å¤§å°ï¼Œé•¿å®½æ¯”å’Œèº«ä»½è¯çœŸå®é•¿å®½æ¯”ä¸€è‡´
 	vector<Point2f> points;
 	vector<Point2f> rec;
 	points.push_back(Point2f(left_up_x, left_up_y));
@@ -421,13 +421,13 @@ int main()
 
 	Mat result_warp;
 	Size size(860, 600);
-	Mat h = findHomography(points, rec);  //hÊÇ·ÂÉä±ä»»¾ØÕó
-	warpPerspective(gray_image, result_warp, h, size);  //·ÂÉä±ä»»
+	Mat h = findHomography(points, rec);  //hæ˜¯ä»¿å°„å˜æ¢çŸ©é˜µ
+	warpPerspective(gray_image, result_warp, h, size);  //ä»¿å°„å˜æ¢
 	namedWindow("result_warp", 1);
 	imshow("result_warp", result_warp);
 	waitKey();
 
-    //½«·ÂÉä±ä»»ºóµÄÍ¼Æ¬Í³Ò»µ÷ÕûÎª1000*700´óĞ¡£¬È»ºóÔÚÕâÉÏÃæÍ¨¹ıÑ¡È¡¹Ì¶¨Î»ÖÃÇĞ¸îÎÒÃÇĞèÒªµÄÄÚÈİ
+    //å°†ä»¿å°„å˜æ¢åçš„å›¾ç‰‡ç»Ÿä¸€è°ƒæ•´ä¸º1000*700å¤§å°ï¼Œç„¶ååœ¨è¿™ä¸Šé¢é€šè¿‡é€‰å–å›ºå®šä½ç½®åˆ‡å‰²æˆ‘ä»¬éœ€è¦çš„å†…å®¹
 	Mat final;
 	resize(result_warp, final, Size(1000, 700));
 	imwrite("final.jpg", final);
@@ -439,9 +439,9 @@ int main()
 	final(rect_1).copyTo(part_ID);
 	final(rect_2).copyTo(part_name);
 	final(rect_3).copyTo(part_num);
-	imwrite("part_ID.jpg", part_ID); //ÇĞ¸îÉí·İÖ¤ºÅ²¿Î»
-	imwrite("part_name.jpg", part_name); //ĞÕÃû²¿Î»
-	imwrite("part_num.jpg", part_num); //°¸±à²¿Î»
+	imwrite("part_ID.jpg", part_ID); //åˆ‡å‰²èº«ä»½è¯å·éƒ¨ä½
+	imwrite("part_name.jpg", part_name); //å§“åéƒ¨ä½
+	imwrite("part_num.jpg", part_num); //æ¡ˆç¼–éƒ¨ä½
 	
 	system("tesseract part_ID.jpg output_ID -psm 7");
 	system("tesseract part_name.jpg output_name -l chi_sim -psm 7");
@@ -450,7 +450,7 @@ int main()
 	string temp;
 	ifstream txt_ID("output_ID.txt");
 	getline(txt_ID, temp);
-	cout << "Éí·İÖ¤ºÅ:" << " " << temp << endl;
+	cout << "èº«ä»½è¯å·:" << " " << temp << endl;
 
 
 	CString str_1;
@@ -461,12 +461,12 @@ int main()
 	str_1 = str_2.c_str();
 	UTF8toANSI(str_1);
 	//str_3 = str_1.Mid(1);
-	cout << "ĞÕÃû:" << str_1 << endl;
+	cout << "å§“å:" << str_1 << endl;
 
 
 	ifstream txt_num("output_num.txt");
 	getline(txt_num, temp);
-	cout << "°¸±àºÅ:" << " " << temp << endl;
+	cout << "æ¡ˆç¼–å·:" << " " << temp << endl;
 	while (1);
 	return 0;
 }
